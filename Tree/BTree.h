@@ -793,7 +793,56 @@ namespace DSL
 				}
 			}
 		}
-		
+
+		// 中序遍历并直接线索化
+		// pre指针指向中序访问时前驱结点，root指向中序访问节点
+		void inorderthreaded(BTreeNode<T>* root_node, BTreeNode<T>*& pre_node)
+		{
+			if(root_node ==NULL)
+			{
+				return ;
+			}
+			else
+			{
+				inorderthreaded(root_node->left_child, pre_node); // 这里返回后代表左子树线索化完毕，pre_node指向链表的最后一个节点
+				root_node->left_child = pre_node;
+				if(pre_node != NULL)
+				{
+					 pre_node->right_child = root_node;
+				}
+				pre_node = root_node;
+				inorderthreaded(root_node->right_child, pre_node);
+				return ;
+			}
+		}
+
+		// 中序遍历线并直接索化
+		// 中序遍历节点的次序是节点的水平次序 head_node转换完成后的头节点，tail_node指向尾节点
+		void inorderthreaded(BTreeNode<T>* root_node, BTreeNode<T>*& head_node, BTreeNode<T>*& tail_node)
+		{
+			if(root_node == NULL)
+			{
+				return;
+			}
+			else
+			{
+				BTreeNode<T>* head = NULL;
+				BTreeNode<T>* tail = NULL;
+				inorderthreaded(root_node->left_child, head, tail);
+				root_node->left_child = tail;
+				if(tail != NULL)
+					tail->right_child = root_node;
+				head_node = ((head != NULL) ? head : root_node);
+				head = NULL;
+				tail = NULL;
+				
+				inorderthreaded(root_node->right_child ,head, tail);
+				root_node->right_child = head;
+				if(head != NULL)
+					head->left_child = root_node;
+				tail_node = ((tail != NULL) ? tail : root_node);
+			}
+		}
 		
 		void clear()
 		{
