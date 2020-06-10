@@ -36,7 +36,7 @@
 namespace DSL 
 {
 	template <int N, typename V, typename E>
-	class MartixGraph £ºpublic Graph<V, E>
+	class MartixGraph : public Graph<V, E>
 	{
 	protected:
 		V*  m_vertexes[N];
@@ -45,7 +45,7 @@ namespace DSL
 	public:
 		MartixGraph()
 		{
-			for(int i = 0; i < eCount(); i++)
+			for(int i = 0; i < vCount(); i++)
 			{
 				m_vertexes[i] = NULL;
 				for(int j = 0; j < eCount(); j++)	
@@ -65,7 +65,7 @@ namespace DSL
 		
 		bool getVertex(int i, V& value) 
 		{
-			if((0 < i) && (i < vCount()))
+			if((0 <= i) && (i < vCount()))
 			{
 				if(m_vertexes[i] != NULL)
 				{
@@ -74,7 +74,6 @@ namespace DSL
 				else
 				{
 					THROW_EXCEPTION(InvalidOperationException, "error: No element in this vertex!");
-					
 				}
 				return ture;
 			}
@@ -83,7 +82,7 @@ namespace DSL
 
 		bool setVertex(int i, const V& value)
 		{
-			if((0 < i) && (i < vCount()))
+			if((0 <= i) && (i < vCount()))
 			{
 				V* temp = m_vertexes[i];
 				if(temp == NULL)
@@ -105,7 +104,7 @@ namespace DSL
 		SharedPointer< Array<int> > getAdjacent(int i)
 		{
 			DynamicArray<int>* vertex_array = NULL;	
-			if((0 < i) && (i < eCount()))
+			if((0 <= i) && (i < eCount()))
 			{
 				int count = 0;
 				for(int j = 0; j < eCount(); j++)
@@ -113,7 +112,8 @@ namespace DSL
 					if(m_edges[i][j] != NULL)
 						count++;
 				}
-				if(!(vertex_array = new DynamicArray(count))
+				vertex_array = new DynamicArray<int>(count);
+				if(vertex_array )
 					THROW_EXCEPTION(NotEnoughMemoryException, "error: no enough memory to malloc new vertex!");
 
 				for(int j = 0, m = 0; j < eCount(); j++)
@@ -124,20 +124,134 @@ namespace DSL
 			}
 			else
 			{
-				THROW_EXCEPTION(InvalidParameterException, "error: invalid params i");
+				THROW_EXCEPTION(InvalidParameterException, "error: invalid params");
 			}
 		}
 		
-		E getEdeg(int i, int j)							
-		bool getEdge(int i, int j, E& value)			
-		bool setEdge(int i, int j, const E& value)		
-		bool removeEdge(int i, int j)					
-		int vCount()									
-		int eCount()									
-		int OD(int i)									
-		int ID(int i)									
-		int TD(int i)									
+		E getEdeg(int i, int j)	
+		{
+			E value;
+			if(!getEdge(i, j, value))
+				THROW_EXCEPTION(InvalidParameterException, "error: invalid params");
+			return value;
+		}
+		
+		bool getEdge(int i, int j, E& value)
+		{
+			if((0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()))
+			{
+				if(m_edges[i][j] != NULL)
+					value = *(m_edges[i][j]);
+				else
+					THROW_EXCEPTION(InvalidOperationException, "error: No element in this vertex!");
+				return ture;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
+		bool setEdge(int i, int j, const E& value)
+		{
+			if((0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()))
+			{
+				E* temp = m_edges[i][j];
+				if(temp == NULL)
+				{
+					temp = new E();
+					if(temp)
+					{
+						*temp = value;
+						m_edges[i][j] = temp;
+						m_ecount++;
+					}
+					else
+					{
+						THROW_EXCEPTION(NotEnoughMemoryException, "error: no enough memory to malloc edge");
+					}
+				}
+				else
+				{
+					*temp = value;
+				}
+				return ture;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		
+		bool removeEdge(int i, int j)
+		{
+			if((0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()))
+			{
+				E* toDel = m_edges[i][j];
+				m_edges[i][j] = NULL;
+				if(toDel == NULL)
+				{
+					m_ecount--;
+					delete toDel;
+				}
+				return ture;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		int vCount()
+		{
+			return N;
+		}
+		
+		int eCount()									
+		{
+			return m_ecount;
+		}
+		
+		int OD(int i)
+		{
+			int count = 0;
+			if((0 <= i) && (i < vCount()))					
+			{
+				for(int j = 0; j < vCount(); j++)
+				{
+					if(m_edges[i][j] != NULL)
+						count++;
+				}
+			}
+			else
+			{
+				THROW_EXCEPTION(InvalidParameterException, "error: inalid parameter");
+			}
+			return count;
+		}
+		
+		int ID(int i)									
+		{
+			int count = 0;
+			if((0 < i) && (i < vCount()))					
+			{
+				for(int j = 0; j < vCount(); j++)
+				{
+					if(m_edges[j][i] != NULL)
+						count++;
+				}
+			}
+			else
+			{
+				THROW_EXCEPTION(InvalidParameterException, "error: inalid parameter");
+			}
+			return count;
+		}
+
+		int TD(int i)									
+		{
+			return (ID(i) + OD(i));
+		}
 
 		~MartixGraph()
 		{
