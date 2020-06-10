@@ -48,7 +48,7 @@ namespace DSL
 			for(int i = 0; i < vCount(); i++)
 			{
 				m_vertexes[i] = NULL;
-				for(int j = 0; j < eCount(); j++)	
+				for(int j = 0; j < vCount(); j++)	
 					m_edges[i][j] = NULL;
 			}
 			m_ecount = 0;
