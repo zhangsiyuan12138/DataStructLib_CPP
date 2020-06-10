@@ -104,28 +104,33 @@ namespace DSL
 		SharedPointer< Array<int> > getAdjacent(int i)
 		{
 			DynamicArray<int>* vertex_array = NULL;	
-			if((0 <= i) && (i < eCount()))
+			if((0 <= i) && (i < vCount()))
 			{
 				int count = 0;
-				for(int j = 0; j < eCount(); j++)
+				for(int j = 0; j < vCount(); j++)
 				{
 					if(m_edges[i][j] != NULL)
 						count++;
 				}
 				vertex_array = new DynamicArray<int>(count);
-				if(vertex_array )
-					THROW_EXCEPTION(NotEnoughMemoryException, "error: no enough memory to malloc new vertex!");
-
-				for(int j = 0, m = 0; j < eCount(); j++)
+				if(vertex_array == NULL)
 				{
-					if(m_edges[i][j] != NULL)
-						vertex_array->set(m++, j);
+					THROW_EXCEPTION(NotEnoughMemoryException, "error: no enough memory to malloc new vertex!");
+				}
+				else
+				{
+					for(int j = 0, m = 0; j < vCount(); j++)
+					{
+						if(m_edges[i][j] != NULL)
+							vertex_array->set(m++, j);
+					}
 				}
 			}
 			else
 			{
 				THROW_EXCEPTION(InvalidParameterException, "error: invalid params");
 			}
+			return vertex_array;
 		}
 		
 		E getEdeg(int i, int j)	
@@ -189,7 +194,7 @@ namespace DSL
 			{
 				E* toDel = m_edges[i][j];
 				m_edges[i][j] = NULL;
-				if(toDel == NULL)
+				if(toDel != NULL)
 				{
 					m_ecount--;
 					delete toDel;
