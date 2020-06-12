@@ -25,7 +25,7 @@
 #include"Array.h"
 
 */
-#include"MarixGraph.h"
+#include"ListGraph.h"
 #include"SharedPointer.h"
 #include"Array.h"
 
@@ -35,7 +35,7 @@ using namespace DSL;
 
 int main(void)
 {
-	MartixGraph<3, int, int> g;
+	ListGraph<int, int> g;
 	g.setEdge(0, 1, 1);
 	g.setEdge(1, 2, 2);
 	g.setEdge(1, 0, 3);
