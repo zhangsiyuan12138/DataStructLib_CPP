@@ -35,31 +35,49 @@ using namespace DSL;
 
 int main(void)
 {
-	ListGraph<int, int> g;
-	g.setEdge(0, 1, 1);
-	g.setEdge(1, 2, 2);
-	g.setEdge(1, 0, 3);
+	ListGraph<char, int> g;
+	g.addVertex('a');
+	g.addVertex('b');
+	g.addVertex('c');
+	g.addVertex('d');
+	g.removeVertex();
+	g.addVertex('d');
 
-	cout << "v count = " << g.vCount() << endl;
-	cout << "e count = " << g.eCount() << endl;
-	cout << "ID(1)" << g.ID(1) << endl;
-	cout << "OD(1)" << g.OD(1) << endl;
+	for(int i = 0; i < g.vCount(); i++)
+		cout << i << " : " << g.getVertex(i) << endl;
 
-	cout << "w(0,1)" << g.getEdeg(0, 1) << endl;
-	cout << "w(1,2)" << g.getEdeg(1, 2) << endl;
-	cout << "w(1,0)" << g.getEdeg(1, 0) << endl;
+	g.setEdge(0, 1, 5);
+	g.setEdge(0, 3, 5);
+	g.setEdge(1, 2, 8);
+	g.setEdge(2, 3, 2);
+	g.setEdge(3, 1, 9);
 
-	SharedPointer<Array<int>> ad_v = g.getAdjacent(1);
-	for(int i = 0; i < ad_v->length(); i++)
-		cout << (*ad_v)[i] <<endl ;
+	cout << "ecount :" << g.eCount() << endl;
+	cout << "vcount :" << g.vCount() << endl;
+
+	cout << " W(0,1) :" << g.getEdge(0, 1) << endl;
+	cout << " W(0,3) :" << g.getEdge(0, 3) << endl;
+	cout << " W(1,2) :" << g.getEdge(1, 2) << endl;
+	cout << " W(2,3) :" << g.getEdge(2, 3) << endl;
+	cout << " W(3,1) :" << g.getEdge(3, 1) << endl;
+
+	g.removeEdge(3, 1);
+	cout << "ecount :" << g.eCount() << endl;
+
+	SharedPointer<Array<int>> ad = g.getAdjacent(0);
+	for(int i = 0; i < ad->length(); i++)
+			cout << (*ad)[i] << endl;	
+
 	
-	g.removeEdge(0, 1);
-	cout << "v count = " << g.vCount() << endl;
-	cout << "e count = " << g.eCount() << endl;
+	g.setEdge(3, 1, 9);
 
-	g.setVertex(1, 100);
-	cout << "v(0)" << g.getVertex(1) << endl;
-	
+	cout << "ID(1) :" << g.ID(1) << endl;
+	cout << "OD(1) :" << g.OD(1) << endl;
+	cout << "TD(1) :" << g.TD(1) << endl;
+
+	g.removeVertex();
+	cout << "ecount :" << g.eCount() << endl;
+
 	return 0;
 } 
 

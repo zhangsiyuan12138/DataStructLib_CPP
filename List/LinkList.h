@@ -175,24 +175,20 @@ namespace DSL
 				int find(const T& obj) const   
 				{
 					int ret = -1;
-					Node* current = reinterpret_cast<Node*>(&m_header);
-					current = current->next;
-					for(int i = 0; i <= m_length; i++)
+					Node* current = this->m_header.next;
+					for(int i = 0; i < this->m_length; i++)
 					{
 						if( current->value == obj)  // 当泛指类型为对象时，无法比较，要在TopClass中重载==操作符
 						{
 							ret = i;
 							break;
 						}
-						else
-						{
-							current = current->next;
-						}
+						current = current->next;
 					}
 					return ret;
 				}
 
-				Node* position(int pos) // 返回下标pos的上一个的节点指针
+				Node* position(int pos) // 返回下pos的上一个的节点指针
 				{
 					Node* current = reinterpret_cast<Node*>(&m_header);   
 					for(int i = 0; i < pos; i++)

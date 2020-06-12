@@ -15,7 +15,7 @@
  *				bool getVertex(int i, V& value) 					判断位置为i的节点和value节点是否相等
  *				bool setVertex(int i, const V& value)				设置节点i的为value
  *				SharedPointer< Array<int> > getAdjacent(int i)		获取节点的i的所有邻接节点
- *				E getEdeg(int i, int j)								获取节点i和节点j之间的边
+ *				E getEdge(int i, int j)								获取节点i和节点j之间的边
  *				bool getEdge(int i, int j, E& value)				判断节点i和节点j之间的边是否和value相等
  *				bool setEdge(int i, int j, const E& value)			设置节点i和节点j之间的边的权重
  *				bool removeEdge(int i, int j)						去掉节点i和节点j之间的权重
@@ -133,7 +133,7 @@ namespace DSL
 			return vertex_array;
 		}
 		
-		E getEdeg(int i, int j)	
+		E getEdge(int i, int j)	
 		{
 			E value;
 			if(!getEdge(i, j, value))

@@ -24,7 +24,7 @@
  *				bool getVertex(int i, V& value) 					判断位置为i的节点和value节点是否相等
  *				bool setVertex(int i, const V& value)				设置节点i的为value
  *				SharedPointer< Array<int> > getAdjacent(int i)		获取节点的i的所有邻接节点
- *				E getEdeg(int i, int j)								获取节点i和节点j之间的边
+ *				E getEdge(int i, int j)								获取节点i和节点j之间的边
  *				bool getEdge(int i, int j, E& value)				判断节点i和节点j之间的边是否和value相等
  *				bool setEdge(int i, int j, const E& value)			设置节点i和节点j之间的边的权重
  *				bool removeEdge(int i, int j)						去掉节点i和节点j之间的权重
@@ -58,7 +58,7 @@ namespace DSL
 			e_end = j;
 		}
 
-		Edge(int i, int j, E& value)
+		Edge(int i, int j, const E& value)
 		{
 			e_sta = i;
 			e_end = j;
@@ -142,7 +142,7 @@ namespace DSL
 					for(int i = (m_list.move(0), 0); !m_list.end(); i++,  m_list.next())
 					{
 						int pos = m_list.current()->edge.find(Edge<E>(i, index)); // 删除与这个顶点相关的边
-						if(pos > 0)
+						if(pos >= 0)
 							m_list.current()->edge.remove(pos);
 					}
 				}
@@ -190,7 +190,7 @@ namespace DSL
 			{
 				Vertex* temp_v = m_list.get(i);
 				V* temp_d = temp_v->data;
-				if(temp_d)
+				if(temp_d == NULL)
 				{
 					temp_d = new V();
 					if(temp_d)
@@ -223,7 +223,7 @@ namespace DSL
 				{
 					for(int i = (temp_v->edge.move(0), 0); !temp_v->edge.end(); i++, temp_v->edge.next())
 					{
-						ad_array[i].set(i, temp_v->edge.current().e_end);
+						ad_array->set(i, temp_v->edge.current().e_end);
 					}
 				}
 				else
@@ -235,10 +235,11 @@ namespace DSL
 			{
 				THROW_EXCEPTION(IdexOutOfBoundException, "error: index out of bound");
 			}
+			return ad_array;
 		}
 
 		
-		E getEdeg(int i, int j)
+		E getEdge(int i, int j)
 		{
 			E ret;
 			if(!getEdge(i, j, ret)) 
@@ -279,11 +280,11 @@ namespace DSL
 				int pos = temp_v->edge.find(Edge<E>(i, j));
 				if(pos >= 0)
 				{
-					ret = temp_v->edge.set(pos, value);
+					ret = temp_v->edge.set(pos, Edge<E>(i, j, value));
 				}
 				else
 				{
-					ret = temp_v->edge.insert(value);
+					ret = temp_v->edge.insert(0, Edge<E>(i, j, value));
 				}
 			}
 			else
@@ -324,12 +325,12 @@ namespace DSL
 		int eCount()									
 		{
 			int count = 0;
-			for(m_list.move(0); m_list.end(); m_list.next())
+			for(m_list.move(0); !m_list.end(); m_list.next())
 				count += m_list.current()->edge.length();
 			return count;
 		}
 
-		int OD(int i)									
+		int ID(int i)									
 		{
 			int count = 0;
 			if((0 <= i) && (i < vCount()))
@@ -353,7 +354,7 @@ namespace DSL
 			return count;
 		}
 
-		int ID(int i)									
+		int OD(int i)									
 		{
 			int count = 0;
 			if((0 <= i) && (i < vCount()))
@@ -369,7 +370,7 @@ namespace DSL
 
 		int TD(int i)									
 		{
-			return (ID() + OD());
+			return (ID(i) + OD(i));
 		}
 
 		~ListGraph()
