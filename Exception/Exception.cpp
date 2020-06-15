@@ -2,6 +2,7 @@
 #include<cstring>
 #include<cstdlib>
 #include<cstdio>
+#include<iostream>
 
 using namespace std; 
 
@@ -20,6 +21,8 @@ namespace DSL
 					pt_location = strcpy(pt_location, file);
 					pt_location = strcat(pt_location, ":"); 
 					pt_location = strcat(pt_location, str);
+					cout << "Error info : " << pt_message << endl;
+					cout << "Error location : " << pt_location << endl;
 				}
 		}
 		else

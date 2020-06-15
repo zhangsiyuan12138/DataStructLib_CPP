@@ -9,12 +9,12 @@ INCLUDE_DIR = -I./List/ -I./TopClass/ -I./Exception/ -I./Array/ -I./SmartPointer
 MEDDIATE = $(shell find ./ -name "*.o")
 
 $(OUTPUT) : $(SOURCE) $(INCLUDE_DEPEND)
-	$(CC) $(CFLAGS) $(SOURCE) $(INCLUDE_DIR) -o $(OUTPUT) 
+	@$(CC) $(CFLAGS) $(SOURCE) $(INCLUDE_DIR) -o $(OUTPUT) 
 
 run:
-	$(OUTPUT) 
+	@$(OUTPUT) 
 
 clean:
-	$(RM) $(MEDDIATE)
+	@$(RM) $(MEDDIATE)
 
 

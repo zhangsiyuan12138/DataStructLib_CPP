@@ -84,7 +84,7 @@ namespace DSL
 		struct Vertex : public TopClass
 		{
 			V* data;
-			LinkList<Edge<E>> edge;
+			LinkList< Edge<E> > edge;
 			
 			Vertex()
 			{

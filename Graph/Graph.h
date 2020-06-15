@@ -49,7 +49,7 @@ namespace DSL
 		virtual int ID(int i) = 0;
 		virtual int TD(int i) = 0;
 
-		SharedPointer<Array<int>> BFS(int i)
+		SharedPointer< Array<int> > BFS(int i)
 		{
 			DynamicArray<int>* output_array = NULL;
 			if((0 <= i) && (i < vCount()))
@@ -68,7 +68,7 @@ namespace DSL
 					tmp_queue.remove();
 					if(!marked[i])
 					{
-						SharedPointer<Array<int>> ad = getAdjacent(v);
+						SharedPointer< Array<int> > ad = getAdjacent(v);
 						for(int j = 0; j < ad->length(); j++)
 							tmp_queue.add((*ad)[j]);
 					}
@@ -94,7 +94,7 @@ namespace DSL
 			return output_array;			
 		}
 
-		SharedPointer<Array<int>> DFS(int i)
+		SharedPointer< Array<int> > DFS(int i)
 		{
 			DynamicArray<int>* output_array = NULL;
 			if((0 <= i) && (i < vCount()))
@@ -111,14 +111,14 @@ namespace DSL
 				{
 					int v = temp_stack.top();
 					temp_stack.pop();
-					if(marked[v] != ture)
+					if(marked[i] != ture)
 					{
-						SharedPointer<Array<int>> temp_ad = getAdjacent(v);
-						for(int j = temp_ad->length() - 1; 0 <= j; j++)
+						SharedPointer< Array<int> > temp_ad = getAdjacent(v);
+						for(int j = temp_ad->length() - 1; 0 <= j; j--)
 							temp_stack.push((*temp_ad)[j]);
 					}
 					ret_queue.add(v);
-					marked[v] = ture;
+					marked[i] = ture;
 				}
 
 				output_array = new DynamicArray<int>(ret_queue.length());

@@ -107,7 +107,7 @@ int main(void)
 	m_graph.setEdge(7, 8, 0);
 	m_graph.setEdge(8, 7, 0);
 
-	SharedPointer<Array<int>> m_bfs = m_graph.DFS(0); //Debug...
+	SharedPointer< Array<int> > m_bfs = m_graph.BFS(0); //Debug...
 	
 	for(int i = 0; i < m_bfs->length(); i++)
 		cout << (*m_bfs)[i] << endl;
