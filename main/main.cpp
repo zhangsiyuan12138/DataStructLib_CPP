@@ -28,6 +28,7 @@
 #include"ListGraph.h"
 #include"SharedPointer.h"
 #include"Array.h"
+#include"MarixGraph.h"
 
 
 using namespace std;  
@@ -35,6 +36,7 @@ using namespace DSL;
 
 int main(void)
 {
+/*
 	ListGraph<char, int> g;
 	g.addVertex('a');
 	g.addVertex('b');
@@ -77,6 +79,38 @@ int main(void)
 
 	g.removeVertex();
 	cout << "ecount :" << g.eCount() << endl;
+*/
+	MartixGraph<9, char, int> m_graph;
+	const char* V = "abcdefghi";
+
+	for(int i = 0; i < 9; i++)
+		m_graph.setVertex(i, V[i]);
+
+	m_graph.setEdge(0, 1, 0);
+	m_graph.setEdge(1, 0, 0);
+	m_graph.setEdge(0, 3, 0);
+	m_graph.setEdge(3, 0, 0);
+	m_graph.setEdge(0, 4, 0);
+	m_graph.setEdge(4, 0, 0);
+	m_graph.setEdge(1, 2, 0);
+	m_graph.setEdge(2, 1, 0);
+	m_graph.setEdge(1, 4, 0);
+	m_graph.setEdge(4, 1, 0);
+	m_graph.setEdge(2, 5, 0);
+	m_graph.setEdge(5, 2, 0);
+	m_graph.setEdge(3, 6, 0);
+	m_graph.setEdge(6, 3, 0);
+	m_graph.setEdge(4, 6, 0);
+	m_graph.setEdge(6, 4, 0);
+	m_graph.setEdge(6, 7, 0);
+	m_graph.setEdge(7, 6, 0);
+	m_graph.setEdge(7, 8, 0);
+	m_graph.setEdge(8, 7, 0);
+
+	SharedPointer<Array<int>> m_bfs = m_graph.DFS(0); //Debug...
+	
+	for(int i = 0; i < m_bfs->length(); i++)
+		cout << (*m_bfs)[i] << endl;
 
 	return 0;
 } 

@@ -53,7 +53,6 @@ namespace DSL
 			}
 			m_ecount = 0;
 		}
-
 		
 		V getVertex(int i)
 		{
