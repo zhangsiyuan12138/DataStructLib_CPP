@@ -29,6 +29,8 @@
 #include "LinkListStack.h"
 #include "DynamicArray.h"
 
+using namespace std; 
+
 namespace DSL
 {
 	template <typename V, typename E>
@@ -66,14 +68,14 @@ namespace DSL
 				{
 					int v = tmp_queue.front();
 					tmp_queue.remove();
-					if(!marked[i])
+					if(!marked[v])
 					{
 						SharedPointer< Array<int> > ad = getAdjacent(v);
 						for(int j = 0; j < ad->length(); j++)
 							tmp_queue.add((*ad)[j]);
+						ret_queue.add(v);
 					}
-					ret_queue.add(v);
-					marked[i] = ture;
+					marked[v] = ture;
 				}
 
 				output_array = new DynamicArray<int>(ret_queue.length());
@@ -111,14 +113,14 @@ namespace DSL
 				{
 					int v = temp_stack.top();
 					temp_stack.pop();
-					if(marked[i] != ture)
+					if(!marked[v])
 					{
 						SharedPointer< Array<int> > temp_ad = getAdjacent(v);
-						for(int j = temp_ad->length() - 1; 0 <= j; j--)
+						for(int j = (temp_ad->length() - 1); 0 <= j; j--)
 							temp_stack.push((*temp_ad)[j]);
+						ret_queue.add(v);
 					}
-					ret_queue.add(v);
-					marked[i] = ture;
+					marked[v] = ture;
 				}
 
 				output_array = new DynamicArray<int>(ret_queue.length());
@@ -139,6 +141,43 @@ namespace DSL
 			}
 		}
 
+		SharedPointer< Array<int> > DFS_R(int i)
+		{
+			DynamicArray<int>* output_array = NULL;
+			if((0 <= i) && (i < vCount()))
+			{
+				LinkListQueue<int> ret_queue;
+				DynamicArray<bool> marked(vCount());
+				for(int j = 0; j < vCount(); j++)
+					marked.set(j, false);
+		
+				DFS_R_core(*this, i, marked, ret_queue);
+
+				output_array = new DynamicArray<int>(ret_queue.length());
+				if(output_array)
+				{
+					for(int j = 0; j < output_array->length(); j++, ret_queue.remove())
+						output_array->set(j, ret_queue.front());
+				}
+			}
+			else
+			{
+				THROW_EXCEPTION(IdexOutOfBoundException, "error: index out of bound");
+			}
+			return output_array;
+		}
+
+		void DFS_R_core(Graph<V, E>& g, int i, Array<bool>& marked, LinkListQueue<int>& ret_queue)
+		{
+			ret_queue.add(i);
+			marked[i] = ture; 
+			SharedPointer< Array<int> > ad = g.getAdjacent(i);
+			for(int j = 0; j < ad->length(); j++)
+			{
+				if(!marked[(*ad)[j]])
+					DFS_R_core(g, (*ad)[j], marked, ret_queue);
+			}
+		}
 	};
 
 }
